@@ -1,0 +1,9 @@
+#!/bin/bash
+(apt-get -q update && apt-get -qy upgrade)>>/var/log/update_script.log 2>>/var/log/update_script.log
+crontab -l >myscript
+count=$(cat myscript | grep /var/log/update_script.log | wc -l)
+if [ "$count" -eq "0" ];then
+	echo "01 * * 4 * $(readlink -f $0)>>/var/log/update_script.log 2>>/var/log/update_script.log">>myscript
+	crontab myscript;
+fi;
+rm myscript

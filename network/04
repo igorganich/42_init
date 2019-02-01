@@ -1,0 +1,1 @@
+netstat -rn | grep default | head -n 1 | sed 's/default *//g' | sed 's/ .*//g'

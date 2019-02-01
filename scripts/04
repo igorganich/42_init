@@ -1,0 +1,32 @@
+#!/bin/bash
+if [ -f $HOME/suma/sumcrontab.md5 ]; then
+	md5sum /etc/crontab>buffer
+	if cmp -s buffer $HOME/suma/sumcrontab.md5; then
+		cat buffer
+		cat $HOME/suma/sumcrontab.md5
+		echo "crontab was not chanded"
+	else
+		cat buffer
+		cat $HOME/suma/sumcrontab.md5 
+		cat buffer>$HOME/suma/sumcrontab.md5
+		echo "changed"
+		echo "crontab was changed" | mail -s "crontab was changed" root
+	fi
+	rm buffer
+else
+	if [ -f $HOME/suma ]; then
+		echo "$HOME/suma already exists"
+	else
+		mkdir $HOME/suma
+	fi
+	md5sum /etc/crontab>$HOME/suma/sumcrontab.md5
+	crontab -l >temp
+	count=$(cat temp | grep $(readlink -f $0) | wc -l)
+	if [ "$count" -eq "0" ];then
+		echo "0 0 * * * $(readlink -f $0)">>temp
+		crontab temp;
+	fi;
+	echo "created"
+	rm temp
+fi
+

@@ -1,0 +1,2 @@
+#echo "46.19.122.85  intra.42.fs" >> /etc/hosts
+#but we have not sudo rights. permission denied

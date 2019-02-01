@@ -1,0 +1,1 @@
+ls -l /var | grep ^d.* | sed 's/^[drstwx\x2B-]* //g' | sed 's/^ *//g' | sed 's/ .*//g'
